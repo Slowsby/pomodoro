@@ -1,11 +1,23 @@
 import { useEffect, useState } from 'react';
-
-const Countdwon = () => {
+interface CountdownProps {
+  exportOnBreak: (is: boolean) => void;
+}
+const Countdwon = ({ exportOnBreak }: CountdownProps) => {
   const [count, setCount] = useState(1);
   const [time, setTime] = useState(1500);
   const [isRunning, setRunning] = useState(false);
   const [isOnBreak, setBreak] = useState(false);
+  const [timeObj] = useState<CustomTime>({
+    mainTime: 1500,
+    shortBreakTime: 300,
+    longBreakTime: 900,
+  });
 
+  type CustomTime = {
+    mainTime: number;
+    shortBreakTime: number;
+    longBreakTime: number;
+  };
   Notification.requestPermission();
 
   useEffect(() => {
@@ -16,19 +28,19 @@ const Countdwon = () => {
             clearInterval(countdown);
             setRunning(false);
             if (!isOnBreak && count % 4 != 0) {
-              setTime(300);
+              setTime(timeObj.shortBreakTime);
               setBreak(true);
-              return 300;
+              return timeObj.shortBreakTime;
             } else if (!isOnBreak && count % 4 === 0) {
-              setTime(900);
+              setTime(timeObj.longBreakTime);
               setBreak(true);
-              return 900;
+              return timeObj.longBreakTime;
             }
             if (isOnBreak) {
               setCount((prev) => prev + 1);
-              setTime(1500);
+              setTime(timeObj.mainTime);
               setBreak(false);
-              return 1500;
+              return timeObj.mainTime;
             }
             return 0;
           } else {
@@ -38,7 +50,7 @@ const Countdwon = () => {
       }, 1000);
       return () => clearInterval(countdown);
     }
-  }, [isRunning, count, isOnBreak]);
+  }, [isRunning, count, isOnBreak, timeObj]);
 
   useEffect(() => {
     if (Notification.permission === 'granted' && time === 0) {
@@ -53,77 +65,98 @@ const Countdwon = () => {
     }
   }, [time, isOnBreak]);
 
+  useEffect(() => {
+    exportOnBreak(isOnBreak);
+  }, [isOnBreak, exportOnBreak]);
   return (
-    <div
-      className={
-        isOnBreak
-          ? 'h-screen bg-[#0A5C32] text-[#dbdbdb]'
-          : 'h-screen bg-[#114b5f] text-[#dbdbdb]'
-      }
-    >
-      <div className='flex flex-col items-center justify-center p-50'>
-        <p className='mt-40 mb-24 text-4xl'>Pomodoro: {count}</p>
-        <p className='text-2xl'>
-          {isOnBreak ? (count % 4 !== 0 ? 'Short Break!' : 'Long Break!') : ''}
-        </p>
-        <p className=' mb-10 text-9xl'>
-          {`${Math.floor(time / 60)}`.padStart(2, '0')}:
-          {`${time % 60}`.padStart(2, '0')}
-        </p>
-        <div className='flex'>
-          <button
+    <div className='flex flex-col items-center justify-center p-50'>
+      <p
+        className={isOnBreak ? 'mt-24 mb-16 text-4xl' : 'mt-24 mb-24 text-4xl'}
+      >
+        Pomodoro: {count}
+      </p>
+      <p className='text-2xl'>
+        {isOnBreak ? (count % 4 !== 0 ? 'Short Break!' : 'Long Break!') : ''}
+      </p>
+      <p className=' mb-10 text-9xl'>
+        {`${Math.floor(time / 60)}`.padStart(2, '0')}:
+        {`${time % 60}`.padStart(2, '0')}
+      </p>
+      <div className='flex'>
+        <button
+          className={
+            isOnBreak
+              ? 'transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-8 ml-9'
+              : 'transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-8 ml-9'
+          }
+          onClick={() => setRunning(true)}
+        >
+          Start
+        </button>
+        <button
+          className={isRunning ? 'block' : 'hidden'}
+          onClick={() => setTime(0)}
+        >
+          <svg
+            version='1.1'
+            xmlns='http://www.w3.org/2000/svg'
+            xmlnsXlink='http://www.w3.org/1999/xlink'
+            width='24px'
+            height='24px'
+            viewBox='0,0,256,256'
+          >
+            <g
+              fill='#ffffff'
+              fill-rule='nonzero'
+              stroke='none'
+              stroke-width='1'
+              stroke-linecap='butt'
+              stroke-linejoin='miter'
+              stroke-miterlimit='10'
+              stroke-dasharray=''
+              stroke-dashoffset='0'
+              font-family='none'
+              font-weight='none'
+              font-size='none'
+              text-anchor='none'
+            >
+              <g transform='scale(10.66667,10.66667)'>
+                <path d='M20,6c-0.552,0 -1,0.448 -1,1v10c0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1v-10c0,-0.552 -0.448,-1 -1,-1zM4.05078,6.92969c-0.53677,-0.02611 -1.05078,0.39175 -1.05078,1v8.14062c0,0.811 0.91317,1.28441 1.57617,0.81641l5.76758,-4.07031c0.564,-0.398 0.564,-1.23481 0,-1.63281l-5.76758,-4.07031c-0.16575,-0.117 -0.34647,-0.17489 -0.52539,-0.18359zM12.05078,6.92969c-0.53677,-0.02611 -1.05078,0.39175 -1.05078,1v8.14062c0,0.811 0.91317,1.28441 1.57617,0.81641l5.76758,-4.07031c0.564,-0.398 0.564,-1.23481 0,-1.63281l-5.76758,-4.07031c-0.16575,-0.117 -0.34647,-0.17489 -0.52539,-0.18359z'></path>
+              </g>
+            </g>
+          </svg>
+        </button>
+        <button
+          className={
+            isOnBreak
+              ? 'transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-7 ml-9'
+              : 'transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-7 ml-9'
+          }
+          onClick={() => setRunning(false)}
+        >
+          Pause
+        </button>
+      </div>
+      <div className='w-[50%] bg-gray-200 rounded-xl shadow-sm overflow-hidden mt-52'>
+        <div className='relative h-6 flex items-center justify-center w-full'>
+          <div
             className={
               isOnBreak
-                ? 'transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-3 m-2'
-                : 'transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-3 m-2'
+                ? 'absolute top-0 bottom-0 left-0 rounded-xl bg-green-500 transition-all duration-300 ease-linear'
+                : 'absolute top-0 bottom-0 left-0 rounded-xl bg-blue-300 transition-all duration-300 ease-linear'
             }
-            onClick={() => setRunning(true)}
-          >
-            Start
-          </button>
-          <button
-            className={
-              isOnBreak
-                ? 'transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-3 m-2'
-                : 'transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-3 m-2'
-            }
-            onClick={() => setRunning(false)}
-          >
-            Pause
-          </button>
-        </div>
-        <div className='flex'>
-          <button
-            className={
-              isOnBreak
-                ? 'transition ease-in duration-150 text-xl bg-[#0E8145] rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-2 px-2'
-                : 'transition ease-in duration-150 text-xl bg-[#028090] rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-2 px-2'
-            }
-            onClick={() => setTime(0)}
-          >
-            Skip
-          </button>
-        </div>
-        <div className='w-[50%] bg-gray-200 rounded-xl shadow-sm overflow-hidden mt-52'>
-          <div className='relative h-6 flex items-center justify-center w-full'>
-            <div
-              className={
+            style={{
+              width: `${
                 isOnBreak
-                  ? 'absolute top-0 bottom-0 left-0 rounded-xl bg-green-500 transition-all duration-300 ease-linear'
-                  : 'absolute top-0 bottom-0 left-0 rounded-xl bg-blue-300 transition-all duration-300 ease-linear'
-              }
-              style={{
-                width: `${
-                  isOnBreak
-                    ? count % 4 !== 0
-                      ? (1 - time / 300) * 100
-                      : (1 - time / 900) * 100
-                    : (1 - time / 1500) * 100
-                }%`,
-              }}
-            ></div>
-            <div className='relative text-indigo-900 font-medium text-sm'>
-              {/*
+                  ? count % 4 !== 0
+                    ? (1 - time / 300) * 100
+                    : (1 - time / 900) * 100
+                  : (1 - time / 1500) * 100
+              }%`,
+            }}
+          ></div>
+          <div className='relative text-indigo-900 font-medium text-sm'>
+            {/*
               {`${Math.floor(
                 isOnBreak
                   ? count % 4 !== 0
@@ -132,7 +165,6 @@ const Countdwon = () => {
                   : (1 - time / 1500) * 100,
               )}%`}
               */}
-            </div>
           </div>
         </div>
       </div>

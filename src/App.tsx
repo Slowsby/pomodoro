@@ -1,7 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Countdwon from './components/Countdown';
+import Customize from './components/Customize';
 import './output.css';
 const App = () => {
+  const [isOnBreak, setBreak] = useState(false);
+  const exportOnBreak = (is: boolean) => {
+    setBreak(is);
+  };
   useEffect(() => {
     const handleQuit = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -13,9 +18,16 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      <Countdwon />
-    </>
+    <div
+      className={
+        isOnBreak
+          ? 'h-screen bg-[#0A5C32] text-[#dbdbdb]'
+          : 'h-screen bg-[#114b5f] text-[#dbdbdb]'
+      }
+    >
+      <Customize isOnBreak={isOnBreak} />
+      <Countdwon exportOnBreak={exportOnBreak} />
+    </div>
   );
 };
 
