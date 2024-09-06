@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 
-interface CountdownProps {
-  exportRunning: (runningStatus: boolean) => void;
-}
-const Countdwon = ({ exportRunning }: CountdownProps) => {
+const Countdwon = () => {
   const [count, setCount] = useState(1);
   const [time, setTime] = useState(1500);
   const [isRunning, setRunning] = useState(false);
   const [isOnBreak, setBreak] = useState(false);
 
+  Notification.requestPermission();
+
   useEffect(() => {
-    exportRunning(isRunning);
     if (isRunning) {
       const countdown = setInterval(() => {
         setTime((time) => {
@@ -40,7 +38,20 @@ const Countdwon = ({ exportRunning }: CountdownProps) => {
       }, 1000);
       return () => clearInterval(countdown);
     }
-  }, [isRunning, exportRunning, count, isOnBreak]);
+  }, [isRunning, count, isOnBreak]);
+
+  useEffect(() => {
+    if (Notification.permission === 'granted' && time === 0) {
+      const title = "Time's up!";
+      const bodyMessage = isOnBreak ? 'Back to work!' : 'Time to take a break!';
+      const options = {
+        body: bodyMessage,
+      };
+      new Notification(title, options);
+      const audioNotification = new Audio('./assets/notification.mp3');
+      audioNotification.play();
+    }
+  }, [time, isOnBreak]);
 
   return (
     <div
@@ -80,9 +91,20 @@ const Countdwon = ({ exportRunning }: CountdownProps) => {
           >
             Pause
           </button>
-          <button onClick={() => setTime(1)}>test</button>
         </div>
-        <div className='w-[50%] bg-gray-200 rounded-xl shadow-sm overflow-hidden mt-5'>
+        <div className='flex'>
+          <button
+            className={
+              isOnBreak
+                ? 'transition ease-in duration-150 text-xl bg-[#0E8145] rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-2 px-2'
+                : 'transition ease-in duration-150 text-xl bg-[#028090] rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-2 px-2'
+            }
+            onClick={() => setTime(0)}
+          >
+            Skip
+          </button>
+        </div>
+        <div className='w-[50%] bg-gray-200 rounded-xl shadow-sm overflow-hidden mt-52'>
           <div className='relative h-6 flex items-center justify-center w-full'>
             <div
               className={
