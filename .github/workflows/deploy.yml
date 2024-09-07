@@ -1,13 +1,10 @@
 name: gh-pages
 
 on:
-  workflow_run:
-    workflows: [Playwright Tests]
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,7 +21,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
-      - name: Deploy with gh-pages
+      - name: Deploy with gh-page
         run: |
           git config user.name 'Hephaestus[bot]'
           git config user.email 'github-actions@github.com'

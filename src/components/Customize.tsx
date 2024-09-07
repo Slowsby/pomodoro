@@ -27,7 +27,7 @@ const Customize = ({ isOnBreak }: { isOnBreak: boolean }) => {
     <>
       <div className='flex justify-between items-center'>
         <div className='flex-col text-2xl p-4'>
-          <p>{time}</p>
+          <p className='date'>{time.toLocaleLowerCase()}</p>
         </div>
         <div className=''>
           <button
