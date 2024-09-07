@@ -71,14 +71,18 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
   return (
     <div className='flex flex-col items-center justify-center p-50'>
       <p
-        className={isOnBreak ? 'mt-24 mb-16 text-4xl' : 'mt-24 mb-24 text-4xl'}
+        className={
+          isOnBreak
+            ? 'pomodoro mt-24 mb-16 text-4xl'
+            : 'pomodoro mt-24 mb-24 text-4xl'
+        }
       >
         Pomodoro: {count}
       </p>
-      <p className='text-2xl'>
+      <p className='breakText text-2xl'>
         {isOnBreak ? (count % 4 !== 0 ? 'Short Break!' : 'Long Break!') : ''}
       </p>
-      <p className=' mb-10 text-9xl'>
+      <p className='countdownTimer mb-10 text-9xl'>
         {`${Math.floor(time / 60)}`.padStart(2, '0')}:
         {`${time % 60}`.padStart(2, '0')}
       </p>
@@ -86,15 +90,15 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
         <button
           className={
             isOnBreak
-              ? 'transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-8 ml-9'
-              : 'transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-8 ml-9'
+              ? 'startBtn transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-8 ml-9'
+              : 'startBtn transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-8 ml-9'
           }
           onClick={() => setRunning(true)}
         >
           Start
         </button>
         <button
-          className={isRunning ? 'block' : 'hidden'}
+          className={isRunning ? 'skipBtn block' : 'skipBtn hidden'}
           onClick={() => setTime(0)}
         >
           <svg
@@ -107,18 +111,18 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
           >
             <g
               fill='#ffffff'
-              fill-rule='nonzero'
+              fillRule='nonzero'
               stroke='none'
-              stroke-width='1'
-              stroke-linecap='butt'
-              stroke-linejoin='miter'
-              stroke-miterlimit='10'
-              stroke-dasharray=''
-              stroke-dashoffset='0'
-              font-family='none'
-              font-weight='none'
-              font-size='none'
-              text-anchor='none'
+              strokeWidth='1'
+              strokeLinecap='butt'
+              strokeLinejoin='miter'
+              strokeMiterlimit='10'
+              strokeDasharray=''
+              strokeDashoffset='0'
+              fontFamily='none'
+              fontWeight='none'
+              fontSize='none'
+              textAnchor='none'
             >
               <g transform='scale(10.66667,10.66667)'>
                 <path d='M20,6c-0.552,0 -1,0.448 -1,1v10c0,0.552 0.448,1 1,1c0.552,0 1,-0.448 1,-1v-10c0,-0.552 -0.448,-1 -1,-1zM4.05078,6.92969c-0.53677,-0.02611 -1.05078,0.39175 -1.05078,1v8.14062c0,0.811 0.91317,1.28441 1.57617,0.81641l5.76758,-4.07031c0.564,-0.398 0.564,-1.23481 0,-1.63281l-5.76758,-4.07031c-0.16575,-0.117 -0.34647,-0.17489 -0.52539,-0.18359zM12.05078,6.92969c-0.53677,-0.02611 -1.05078,0.39175 -1.05078,1v8.14062c0,0.811 0.91317,1.28441 1.57617,0.81641l5.76758,-4.07031c0.564,-0.398 0.564,-1.23481 0,-1.63281l-5.76758,-4.07031c-0.16575,-0.117 -0.34647,-0.17489 -0.52539,-0.18359z'></path>
@@ -129,8 +133,8 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
         <button
           className={
             isOnBreak
-              ? 'transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-7 ml-9'
-              : 'transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-7 ml-9'
+              ? 'pauseBtn transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-7 ml-9'
+              : 'pauseBtn transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-7 ml-9'
           }
           onClick={() => setRunning(false)}
         >
