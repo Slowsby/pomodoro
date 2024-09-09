@@ -55,9 +55,6 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
   }, [isRunning, count, isOnBreak, customTime]);
 
   useEffect(() => {
-    console.log('Count updated:', count);
-  }, [count]);
-  useEffect(() => {
     if (Notification.permission === 'granted' && time === 0) {
       const title = "Time's up!";
       const bodyMessage = isOnBreak ? 'Back to work!' : 'Time to take a break!';
@@ -77,11 +74,9 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
   return (
     <div className='flex flex-col items-center justify-center p-50'>
       <p
-        className={
-          isOnBreak
-            ? 'pomodoro mt-24 mb-16 text-4xl'
-            : 'pomodoro mt-24 mb-24 text-4xl'
-        }
+        className={`
+          ${isOnBreak ? 'mb-16' : 'mb-24'} pomodoro mt-24 text-4xl
+        `}
       >
         Pomodoro: {count}
       </p>
@@ -94,17 +89,17 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
       </p>
       <div className='flex'>
         <button
-          className={
+          className={`${
             isOnBreak
-              ? 'startBtn transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-8 ml-9'
-              : 'startBtn transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-8 ml-9'
-          }
+              ? 'bg-[#0E8145] hover:bg-[#206635]'
+              : 'bg-[#028090] hover:bg-[#28636b]'
+          } startBtn transition ease-in duration-150 text-3xl p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl active:contrast-125 py-3 m-2 mr-8 ml-9`}
           onClick={() => setRunning(true)}
         >
           Start
         </button>
         <button
-          className={isRunning ? 'skipBtn block' : 'skipBtn hidden'}
+          className={`${isRunning ? 'block' : 'hidden'} skipBtn`}
           onClick={() => setTime(0)}
         >
           <svg
@@ -137,11 +132,11 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
           </svg>
         </button>
         <button
-          className={
+          className={`${
             isOnBreak
-              ? 'pauseBtn transition ease-in duration-150 text-3xl bg-[#0E8145] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#206635] active:contrast-125 py-3 m-2 mr-7 ml-9'
-              : 'pauseBtn transition ease-in duration-150 text-3xl bg-[#028090] p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl hover:bg-[#28636b] active:contrast-125 py-3 m-2 mr-7 ml-9'
-          }
+              ? 'bg-[#0E8145] hover:bg-[#206635]'
+              : 'bg-[#028090] hover:bg-[#28636b]'
+          } pauseBtn transition ease-in duration-150 text-3xl p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl active:contrast-125 py-3 m-2 mr-8 ml-9`}
           onClick={() => setRunning(false)}
         >
           Pause
@@ -150,11 +145,9 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
       <div className='w-[50%] bg-gray-200 rounded-xl shadow-sm overflow-hidden mt-52'>
         <div className='relative h-6 flex items-center justify-center w-full'>
           <div
-            className={
-              isOnBreak
-                ? 'absolute top-0 bottom-0 left-0 rounded-xl bg-green-500 transition-all duration-300 ease-linear'
-                : 'absolute top-0 bottom-0 left-0 rounded-xl bg-blue-300 transition-all duration-300 ease-linear'
-            }
+            className={`${
+              isOnBreak ? ' bg-green-500' : ' bg-blue-300'
+            } absolute top-0 bottom-0 left-0 rounded-xl transition-all duration-300 ease-linear`}
             style={{
               width: `${
                 isOnBreak

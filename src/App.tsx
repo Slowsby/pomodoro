@@ -36,11 +36,10 @@ const App = () => {
 
   return (
     <div
-      className={
-        isOnBreak
-          ? 'h-screen bg-[#0A5C32] text-[#dbdbdb]'
-          : 'h-screen bg-[#114b5f] text-[#dbdbdb]'
-      }
+      className={`
+        ${
+          isOnBreak ? 'bg-[#0A5C32]' : 'bg-[#114b5f]'
+        } mainBg h-screen text-[#dbdbdb]`}
     >
       <Customize
         isOnBreak={isOnBreak}

@@ -78,14 +78,14 @@ const Customize = ({ isOnBreak, setTimeObj, customTime }: CustomizeProps) => {
         <div className='flex-col'>
           <button
             className={`
-              ${isOnBreak ? 'bg-[#0E8145] hover:bg-[#206635]' : 'bg-[#028090] hover:bg-[#28636b]'} transition ease-in duration-150 text-lg p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-2 m-2 hover:contrast-150
+              ${isOnBreak ? 'bg-[#0E8145] hover:bg-[#206635]' : 'bg-[#028090] hover:bg-[#28636b]'} customizeBtn transition ease-in duration-150 text-lg p-4 rounded-full shadow-lg hover:shadow-2xl hover:drop-shadow-xl py-2 m-2 hover:contrast-150
             `}
             onClick={() => setShow((prev) => !prev)}
           >
             Customize
           </button>
           <div
-            className={` ${show ? 'block' : 'hidden'}  ${isOnBreak ? 'bg-[#0E8145]' : 'bg-[#028090]'} rounded-lg absolute flex flex-col justify-center items-center pt-2 p-5 m-2 right-0 w-56 mb-0 pb-2`}
+            className={` ${show ? 'block' : 'hidden'}  ${isOnBreak ? 'bg-[#0E8145]' : 'bg-[#028090]'} customizeDiv rounded-lg absolute flex flex-col justify-center items-center pt-2 p-5 m-2 right-0 w-56 mb-0 pb-2`}
           >
             <h3 className='pt-0 mt-0 text-2xl'>Customize Times</h3>
             <p className='pt-0 mb-1'>(minutes)</p>

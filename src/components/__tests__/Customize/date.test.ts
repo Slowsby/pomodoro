@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.goto('http://localhost:3000/pomodoro/');
+});
+
 test('date displays correct AM format', async ({ page }) => {
   await page.clock.install({ time: new Date('2024-01-01T08:00:00') });
   await page.goto('http://localhost:3000/pomodoro/');
