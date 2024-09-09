@@ -1,57 +1,62 @@
 import { useEffect, useState } from 'react';
+import { CustomTime } from '../types.ts';
 interface CountdownProps {
   exportOnBreak: (is: boolean) => void;
+  customTime: CustomTime;
 }
-const Countdwon = ({ exportOnBreak }: CountdownProps) => {
+const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
+  const [time, setTime] = useState<number>(customTime.mainTime);
+  const [isRunning, setRunning] = useState<boolean>(false);
+  const [isOnBreak, setBreak] = useState<boolean>(false);
   const [count, setCount] = useState(1);
-  const [time, setTime] = useState(1500);
-  const [isRunning, setRunning] = useState(false);
-  const [isOnBreak, setBreak] = useState(false);
-  const [timeObj] = useState<CustomTime>({
-    mainTime: 1500,
-    shortBreakTime: 300,
-    longBreakTime: 900,
-  });
 
-  type CustomTime = {
-    mainTime: number;
-    shortBreakTime: number;
-    longBreakTime: number;
-  };
   Notification.requestPermission();
+
+  // Update the timer value when customTime changes
+  useEffect(() => {
+    setTime(
+      isOnBreak
+        ? count % 4 !== 0
+          ? customTime.shortBreakTime
+          : customTime.longBreakTime
+        : customTime.mainTime,
+    );
+  }, [customTime, isOnBreak, count]);
 
   useEffect(() => {
     if (isRunning) {
       const countdown = setInterval(() => {
-        setTime((time) => {
-          if (time === 0) {
+        setTime((prevTime) => {
+          if (prevTime === 0) {
             clearInterval(countdown);
             setRunning(false);
-            if (!isOnBreak && count % 4 != 0) {
-              setTime(timeObj.shortBreakTime);
-              setBreak(true);
-              return timeObj.shortBreakTime;
-            } else if (!isOnBreak && count % 4 === 0) {
-              setTime(timeObj.longBreakTime);
-              setBreak(true);
-              return timeObj.longBreakTime;
-            }
-            if (isOnBreak) {
-              setCount((prev) => prev + 1);
-              setTime(timeObj.mainTime);
+            if (!isOnBreak) {
+              if (count % 4 !== 0) {
+                setBreak(true);
+                return customTime.shortBreakTime;
+              } else {
+                setBreak(true);
+                return customTime.longBreakTime;
+              }
+            } else {
               setBreak(false);
-              return timeObj.mainTime;
+              console.log(count);
+              setCount((prev) => prev + 1);
+              console.log(count);
+              return customTime.mainTime;
             }
-            return 0;
           } else {
-            return time - 1;
+            return prevTime - 1;
           }
         });
       }, 1000);
       return () => clearInterval(countdown);
     }
-  }, [isRunning, count, isOnBreak, timeObj]);
+  }, [isRunning, count, isOnBreak, customTime]);
 
+  useEffect(() => {
+    console.log('Count updated:', count);
+  }, [count]);
   useEffect(() => {
     if (Notification.permission === 'granted' && time === 0) {
       const title = "Time's up!";
@@ -68,6 +73,7 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
   useEffect(() => {
     exportOnBreak(isOnBreak);
   }, [isOnBreak, exportOnBreak]);
+
   return (
     <div className='flex flex-col items-center justify-center p-50'>
       <p
@@ -153,9 +159,9 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
               width: `${
                 isOnBreak
                   ? count % 4 !== 0
-                    ? (1 - time / 300) * 100
-                    : (1 - time / 900) * 100
-                  : (1 - time / 1500) * 100
+                    ? (1 - time / customTime.shortBreakTime) * 100
+                    : (1 - time / customTime.longBreakTime) * 100
+                  : (1 - time / customTime.mainTime) * 100
               }%`,
             }}
           ></div>
@@ -175,4 +181,4 @@ const Countdwon = ({ exportOnBreak }: CountdownProps) => {
     </div>
   );
 };
-export default Countdwon;
+export default Countdown;

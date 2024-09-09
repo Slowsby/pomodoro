@@ -1,9 +1,26 @@
 import { useEffect, useState } from 'react';
-import Countdwon from './components/Countdown';
+import Countdown from './components/Countdown';
 import Customize from './components/Customize';
-import './output.css';
+import { CustomTime } from './types.ts';
+import './index.css';
 const App = () => {
-  const [isOnBreak, setBreak] = useState(false);
+  const [isOnBreak, setBreak] = useState<boolean>(false);
+  const [timeObj, setTimeObj] = useState<CustomTime>({
+    mainTime: 1500,
+    shortBreakTime: 300,
+    longBreakTime: 900,
+  });
+
+  useEffect(() => {
+    const storedTimeObj = localStorage.getItem('timeObj');
+    if (storedTimeObj) {
+      setTimeObj(JSON.parse(storedTimeObj));
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('timeObj', JSON.stringify(timeObj));
+  }, [timeObj]);
+
   const exportOnBreak = (is: boolean) => {
     setBreak(is);
   };
@@ -13,7 +30,7 @@ const App = () => {
     };
     window.addEventListener('beforeunload', handleQuit);
     return () => {
-      window.addEventListener('beforeunload', handleQuit);
+      window.removeEventListener('beforeunload', handleQuit);
     };
   }, []);
 
@@ -25,8 +42,12 @@ const App = () => {
           : 'h-screen bg-[#114b5f] text-[#dbdbdb]'
       }
     >
-      <Customize isOnBreak={isOnBreak} />
-      <Countdwon exportOnBreak={exportOnBreak} />
+      <Customize
+        isOnBreak={isOnBreak}
+        customTime={timeObj}
+        setTimeObj={setTimeObj}
+      />
+      <Countdown exportOnBreak={exportOnBreak} customTime={timeObj} />
     </div>
   );
 };
