@@ -19,8 +19,8 @@ const Customize = ({ isOnBreak, setTimeObj, customTime }: CustomizeProps) => {
     new Date().toLocaleTimeString([], {
       hour12: true,
       hour: 'numeric',
-      minute: '2-digit',
-    }),
+      minute: '2-digit'
+    })
   );
   const [mTime, setMTime] = useState<number>(0);
   const [sBreak, setSBreak] = useState<number>(0);
@@ -32,8 +32,8 @@ const Customize = ({ isOnBreak, setTimeObj, customTime }: CustomizeProps) => {
         new Date().toLocaleTimeString([], {
           hour12: true,
           hour: 'numeric',
-          minute: '2-digit',
-        }),
+          minute: '2-digit'
+        })
       );
     }, 1000);
 
@@ -43,12 +43,12 @@ const Customize = ({ isOnBreak, setTimeObj, customTime }: CustomizeProps) => {
   const changeTime = (
     mainTime: number,
     shortBreakTime: number,
-    longBreakTime: number,
+    longBreakTime: number
   ) => {
     setTimeObj({
       mainTime,
       shortBreakTime,
-      longBreakTime,
+      longBreakTime
     });
   };
 
@@ -131,12 +131,20 @@ const Customize = ({ isOnBreak, setTimeObj, customTime }: CustomizeProps) => {
                 required
               />
             </div>
-            <input
-              className={`${isOnBreak ? 'bg-[#0d6e3c]' : 'bg-[#1d6974]'} p-2 rounded-t-lg cursor-pointer`}
-              type='button'
-              value={'Submit'}
-              onClick={() => handleSubmit()}
-            />
+            <div className='flex flex-row'>
+              <input
+                className={`${isOnBreak ? 'bg-[#0d6e3c]' : 'bg-[#1d6974]'} p-2 rounded-t-lg cursor-pointer mr-5`}
+                type='button'
+                value={'Default'}
+                onClick={() => changeTime(25 * 60, 5 * 60, 15 * 60)}
+              />{' '}
+              <input
+                className={`${isOnBreak ? 'bg-[#0d6e3c]' : 'bg-[#1d6974]'} p-2 rounded-t-lg cursor-pointer ml-5`}
+                type='button'
+                value={'Submit'}
+                onClick={() => handleSubmit()}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -3,8 +3,13 @@ import { CustomTime } from '../types.ts';
 interface CountdownProps {
   exportOnBreak: (is: boolean) => void;
   customTime: CustomTime;
+  currentTask: string;
 }
-const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
+const Countdown = ({
+  exportOnBreak,
+  customTime,
+  currentTask
+}: CountdownProps) => {
   const [time, setTime] = useState<number>(customTime.mainTime);
   const [isRunning, setRunning] = useState<boolean>(false);
   const [isOnBreak, setBreak] = useState<boolean>(false);
@@ -19,7 +24,7 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
         ? count % 4 !== 0
           ? customTime.shortBreakTime
           : customTime.longBreakTime
-        : customTime.mainTime,
+        : customTime.mainTime
     );
   }, [customTime, isOnBreak, count]);
 
@@ -59,7 +64,7 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
       const title = "Time's up!";
       const bodyMessage = isOnBreak ? 'Back to work!' : 'Time to take a break!';
       const options = {
-        body: bodyMessage,
+        body: bodyMessage
       };
       new Notification(title, options);
       const audioNotification = new Audio('./assets/notification.mp3');
@@ -82,6 +87,9 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
       </p>
       <p className='breakText text-2xl'>
         {isOnBreak ? (count % 4 !== 0 ? 'Short Break!' : 'Long Break!') : ''}
+      </p>
+      <p className='text-xl'>
+        {currentTask ? `Current Task: ${currentTask}` : ''}
       </p>
       <p className='countdownTimer mb-10 text-9xl'>
         {`${Math.floor(time / 60)}`.padStart(2, '0')}:
@@ -142,7 +150,8 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
           Pause
         </button>
       </div>
-      <div className='w-[50%] bg-gray-200 rounded-xl shadow-sm overflow-hidden mt-52'>
+      {/* PROGRESS BAR 
+      <div className='w-[50%] bg-gray-400 rounded-xl shadow-sm overflow-hidden my-12'>
         <div className='relative h-6 flex items-center justify-center w-full'>
           <div
             className={`${
@@ -155,11 +164,10 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
                     ? (1 - time / customTime.shortBreakTime) * 100
                     : (1 - time / customTime.longBreakTime) * 100
                   : (1 - time / customTime.mainTime) * 100
-              }%`,
+              }%`
             }}
           ></div>
           <div className='relative text-indigo-900 font-medium text-sm'>
-            {/*
               {`${Math.floor(
                 isOnBreak
                   ? count % 4 !== 0
@@ -167,10 +175,9 @@ const Countdown = ({ exportOnBreak, customTime }: CountdownProps) => {
                     : (1 - time / 900) * 100
                   : (1 - time / 1500) * 100,
               )}%`}
-              */}
           </div>
-        </div>
-      </div>
+        </div> 
+      </div> */}
     </div>
   );
 };
