@@ -57,11 +57,11 @@ const Tasks = ({ isOnBreak, setCurrentTask }: TaskProps) => {
   return (
     <div className='flex flex-col justify-center items-center'>
       <div
-        className={`${isOpen ? 'flex' : 'hidden'} ${isOnBreak ? 'bg-[#4d7e5c]' : 'bg-[#5d8b9c]'} flex-col absolute w-96  rounded-lg mb-[28em] items-center justify-center shadow-2xl drop-shadow-2xl`}
+        className={`${isOpen ? 'flex' : 'hidden'} ${isOnBreak ? 'bg-[#4d7e5c]' : 'bg-[#5d8b9c]'} taskModal flex-col absolute w-96  rounded-lg mb-[28em] items-center justify-center shadow-2xl drop-shadow-2xl`}
       >
         <p className='text-2xl text-white mb-2 pt-5'>New Task</p>
         <input
-          className='text-black focus:outline-none rounded-lg p-2 text-lg w-[90%] '
+          className='taskInput text-black focus:outline-none rounded-lg p-2 text-lg w-[90%] '
           type='text'
           placeholder='Describe your task...'
           value={inputContent}
@@ -71,13 +71,13 @@ const Tasks = ({ isOnBreak, setCurrentTask }: TaskProps) => {
 
         <div className='flex flex-row justify-between w-[90%]'>
           <button
-            className='text-white transition ease-out delay-75 bg-red-600  my-2 p-2 rounded-lg hover:bg-red-800 hover:drop-shadow-xl'
+            className='cancelBtn text-white transition ease-out delay-75 bg-red-600  my-2 p-2 rounded-lg hover:bg-red-800 hover:drop-shadow-xl'
             onClick={() => setIsOpen(false)}
           >
             Cancel
           </button>
           <button
-            className='text-white transition ease-out delay-50 bg-green-600  my-2 p-2 rounded-lg hover:bg-green-800 hover:drop-shadow-xl'
+            className='confirmBtn text-white transition ease-out delay-50 bg-green-600  my-2 p-2 rounded-lg hover:bg-green-800 hover:drop-shadow-xl'
             onClick={() => {
               if (inputContent) {
                 setTasks((prevArr) => [...prevArr, inputContent]);
@@ -94,11 +94,11 @@ const Tasks = ({ isOnBreak, setCurrentTask }: TaskProps) => {
       <div className='flex flex-col w-52 divide-y divide-gray-500'>
         {tasks.map((el, index) => {
           return (
-            <div className='flex flex-row items-center justify-between w-full mt-3'>
+            <div className='taskContent flex flex-row items-center justify-between w-full mt-3'>
               <p className='mr-2'>#{index + 1}</p>
-              <p className='ml-1'>{el}</p>
+              <p className=' ml-1'>{el}</p>
               <button
-                className='transition  delay-100 ml-3 text-2xl hover:text-green-600 font-black'
+                className='finishBtn transition delay-100 ml-3 text-2xl hover:text-green-600 font-black'
                 onClick={() => deleteEntry(index)}
               >
                 ✓
@@ -108,7 +108,7 @@ const Tasks = ({ isOnBreak, setCurrentTask }: TaskProps) => {
         })}
       </div>
       <button
-        className='text-5xl hover:contrast-150 active:text-gray-400 p-5'
+        className='addTaskBtn text-5xl hover:contrast-150 active:text-gray-400 p-5'
         onClick={() => setIsOpen(true)}
       >
         +
